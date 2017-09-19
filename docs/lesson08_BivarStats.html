@@ -124,80 +124,53 @@ $(document).ready(function () {
 </div>
 
 
-<div id="univariate-descriptive-stats" class="section level2">
-<h2>Univariate Descriptive Stats</h2>
-<p>This lesson focuses on describing and summarizing your data well. We will cover not only descriptive statistics appropriate for each type of variable, but other considerations such as sample size and missing data which may vary for each measurement and variable in your dataset. Try to think of everything you want to cover in the methods section of your manuscript (project report) and the beginning of your results section. The stats computed here will be used to help layout “Table 1” which typically summarizes the data used in all analyses within the manuscript/report.</p>
+<div id="bivariate-descriptive-stats" class="section level2">
+<h2>Bivariate Descriptive Stats</h2>
+<p>This lesson focuses on describing and summarizing your data by groups and/or looking at bi-variate associations given the type of each variable:</p>
+<ul>
+<li>continuous - continuous
+<ul>
+<li>Pearon’s R</li>
+<li>Spearman’s rho (non-parametric)</li>
+<li>Kendall’s Tau (non-parametric)</li>
+</ul></li>
+<li>continuous - ordinal (or ordinal - ordinal)
+<ul>
+<li>Spearman’s rho (non-parametric)</li>
+<li>Kendall’s Tau (non-parametric)</li>
+</ul></li>
+<li>categorical - ordinal or continuous
+<ul>
+<li>2 independent groups
+<ul>
+<li>t-test</li>
+<li>Mann Whitney (non-parametric) test</li>
+</ul></li>
+<li>3 or more independent groups
+<ul>
+<li>ANOVA</li>
+<li>Kruskal-Wallis (non-parametric ANOVA)</li>
+</ul></li>
+</ul></li>
+<li>categorical - categorical
+<ul>
+<li>Chi-square tests (when &lt;20% of cells have expected counts &lt; 5)</li>
+<li>for 2x2, Fisher’s Exact Test (when 20%+ cells have expected counts &lt; 5)</li>
+<li>for rxc, Fisher-Freeman-Halton Test (when 20%+ cells have expected counts &lt; 5)</li>
+</ul></li>
+</ul>
 </div>
 <div id="the-help-dataset" class="section level2">
 <h2>The HELP Dataset</h2>
-<p>For today and several future lessons, we’ll be working with the HELP (Health Evaluation and Linkage to Primary Care) dataset. You can learn more about this dataset at <a href="https://nhorton.people.amherst.edu/sasr2/datasets.php" class="uri">https://nhorton.people.amherst.edu/sasr2/datasets.php</a>. This dataset is also used by Ken Kleinman and Nicholas J. Horton for their book “SAS and R: Data Management, Statistical Analysis, and Graphics” <em>(which is another helpful textbook)</em>.</p>
-<ul>
-<li>You can download the datasets from their website <a href="https://nhorton.people.amherst.edu/sasr2/datasets.php" class="uri">https://nhorton.people.amherst.edu/sasr2/datasets.php</a></li>
-<li>The original publication is referenced at <a href="https://www.ncbi.nlm.nih.gov/pubmed/12653820?ordinalpos=17&amp;itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_DefaultReportPanel.Pubmed_RVDocSum" class="uri">https://www.ncbi.nlm.nih.gov/pubmed/12653820?ordinalpos=17&amp;itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_DefaultReportPanel.Pubmed_RVDocSum</a></li>
-<li>The HELP documentation (including all forms/surveys/instruments used) are located at <a href="https://nhorton.people.amherst.edu/help/" class="uri">https://nhorton.people.amherst.edu/help/</a>
-<ul>
-<li>specifically the details on all BASELINE assessments are located in this PDF <a href="https://nhorton.people.amherst.edu/help/HELP-baseline.pdf" class="uri">https://nhorton.people.amherst.edu/help/HELP-baseline.pdf</a></li>
-<li>with the follow up time points described in the PDF <a href="https://nhorton.people.amherst.edu/help/HELP-followup.pdf" class="uri">https://nhorton.people.amherst.edu/help/HELP-followup.pdf</a></li>
-</ul></li>
-</ul>
-</div>
-<div id="descriptive-stats" class="section level2">
-<h2>Descriptive Stats</h2>
-<p>When putting together your descriptive statistical summaries, it is usually easiest to summarize continuous/numerical data separately from categorical/ordinal data types.</p>
-<div id="continuousnumerical-data" class="section level3">
-<h3>Continuous/Numerical Data</h3>
-<ul>
-<li>Sample Size</li>
-<li>Amount of Missing Data</li>
-<li>Range [min, max]</li>
-<li>Measure of Centrality - mean (parametric) or median (non-parametric)</li>
-<li>Measure of Variance (spread) - standard deviation (parametric), IQR [25th, 75th] or other percentiles [2.5th, 97.5th] (non-parametric)</li>
-<li>Distribution - normal, symmetric, skewed, multi-modal, etc.
-<ul>
-<li>use to help assess parametric or non-parametric stats</li>
-<li>determine if/how to mathematical transform the data (sqrt, LN, 1/x, others…)</li>
-<li>determine if/how to (perhaps) recode
-<ul>
-<li>median split,</li>
-<li>zero-inflated (or ceiling-inflated) splits,</li>
-<li>ordinalize the data (break into thirds, quartiles, etc)</li>
-<li>break along clinical cutpoints</li>
-</ul></li>
-</ul></li>
-</ul>
-</div>
-<div id="categoricalordinal-data" class="section level3">
-<h3>Categorical/Ordinal Data</h3>
-<ul>
-<li>Sample Size</li>
-<li>Amount of Missing Data</li>
-<li>Range [min, max]</li>
-<li>Review frequency tables (counts and percents)
-<ul>
-<li>look for “distribution” of large % or low % (&gt;95%, &lt;5%)</li>
-<li>look for counts (expected counts &lt; 5)</li>
-<li>may want to collapse categories together</li>
-<li>might consider dichotomizing the categories
-<ul>
-<li>married/partnered vs single/divorced/widowed</li>
-<li>caucasian vs minorities</li>
-<li>heterosexual vs homosexual/bisexual/transexual/other</li>
-</ul></li>
-<li>may want to drop categories
-<ul>
-<li><em>(does it make sense to merge 2 subjects without disease but with a rare condition with other subjects without the disease) - or if this rare condition may be important to the outcome(s) of interest and is under-represented, these 2 subjects might be removed until a future study can investigate this issue further</em></li>
-</ul></li>
-</ul></li>
-</ul>
-</div>
+<p>We are still working with the HELP (Health Evaluation and Linkage to Primary Care) dataset. See details at <a href="https://melindahiggins2000.github.io/N736Fall2017_lesson07/lesson07_univStats.html" class="uri">https://melindahiggins2000.github.io/N736Fall2017_lesson07/lesson07_univStats.html</a>.</p>
 </div>
 <div id="r-code" class="section level2">
 <h2>R Code</h2>
-<p>Run examples shown in <code>lesson07_Rcode.R</code></p>
+<p>Run examples shown in <code>lesson08_Rcode.R</code></p>
 </div>
 <div id="sas-code" class="section level2">
 <h2>SAS Code</h2>
-<p>Run examples shown in <code>lesson07_SAScode.sas</code></p>
+<p>Run examples shown in <code>lesson08_SAScode.sas</code></p>
 </div>
 
 
