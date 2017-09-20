@@ -1,5 +1,5 @@
 ---
-title: "Bivariate Descriptive Stats"
+title: "Bivariate Statistics"
 author: "Melinda K. Higgins, PhD."
 date: "September 20, 2017"
 output: html_document
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
 ```
 
-## Bivariate Descriptive Stats
+## Bivariate Statistics
 
 This lesson focuses on describing and summarizing your data by groups and/or looking at bi-variate associations given the type of each variable:
 

@@ -1,101 +1,85 @@
 * ==========================================;
-* N736 Lesson 07 - 09/18/2017
+* N736 Lesson 08 - 09/20/2017
 *
-* Univariate Stats
+* Univariate/Bivariate Stats
 * working with the HELP dataset
 * ==========================================;
 
 * create a library - change to your directory
 * where you have downloaded the help.sas7bdat dataset;
-LIBNAME L7 'C:\MyGithub\N736Fall2017_lesson07';
+LIBNAME L8 'C:\MyGithub\N736Fall2017_lesson08';
 
 * make a copy in the WORK library;
 DATA work.help;
-  SET L7.help;
+  SET L8.help;
   RUN;
 
-* get univariate stats;
-proc univariate data=help plots;
-  var age;
-  run;
-
 * get univariate stats
-* can change the percentile algorithm
-* default is PCTLDEF=5, but there are
-* options 1,2,3,4 or 5 - see help for more details;
-
-proc univariate data=help plots pctldef=1;
-  var age;
-  run;
-
-* try algorithm 3;
-  proc univariate data=help plots pctldef=3;
-  var age;
-  run;
-
-* get univariate stats
-* add histogram
-* and overlay normal curve;
-
-proc univariate data=help plots pctldef=1;
+  add a qqplot
+  and run normality tests;
+proc univariate data=help plots normaltest;
   var age;
   histogram age / normal;
-  run;
-
-* get other probability plots;
-
-proc univariate data=help plots pctldef=1;
-  var age;
-  ppplot age;
-  probplot age;
   qqplot age;
   run;
 
-* some plots - boxplot;
-* to get a boxplot of 1 variable
-* we have to create a dummy variable
-* that is a constant, x=1, then we can use
-* this variable to trick SAS into making 1 boxplot;
-
-data help2;
-  set help;
-  x=1;
+* get summary stats
+  for multiple vars;
+proc means data=help n min max mean std median q1 q3;
+  var age cesd pcs mcs;
   run;
 
-proc boxplot data=help2;
-  plot age*x;
+* get summary stats
+  by gender female;
+proc means data=help n min max mean std median q1 q3;
+  var age cesd pcs mcs;
+  class female;
   run;
 
-* boxplot of age by racegrp
-* using proc sgplot and VBOX option;
+* ==================================
+  continuous - continuous
+  compute correlations
+  ==================================;
 
-PROC SGPLOT DATA=help;
-  VBOX age / category = racegrp;
-RUN;
-
-* can change the percentile method if you want;
-
-PROC SGPLOT DATA=help;
-  VBOX age / category = racegrp percentile=3;
-RUN;
-
-* other summaries;
-
-proc means data=help;
-  var age;
+proc corr data=help;
+  var age cesd pcs mcs;
   run;
 
-* ages by race;
-
-proc means data=help;
-  var age;
-  class racegrp;
+proc corr data=help pearson spearman kendall
+  plots(maxpoints=10000)=matrix(histogram);
+  var age cesd pcs mcs;
   run;
 
-* categorical data;
+* ==================================
+  continuous - categorical (2-levels)
+  compute correlations and
+  compare to t-test and Mann Whitney
+  tests
+  ==================================;
+
+proc corr data=help;
+  var female age cesd;
+  run;
+
+proc ttest;
+  class female;
+  var age cesd;
+  run;
+
+proc npar1way;
+  class female;
+  var age cesd;
+  run;
+
+* ==================================
+  categorical - categorical
+  chi-square test and fisher's 
+  exact tests
+  ==================================;
 
 proc freq data=help;
-  tables racegrp / plots=freqplot;
+  tables female*racegrp / 
+    expected norow nopercent chisq fisher plots=freqplot;
   run;
 
 
